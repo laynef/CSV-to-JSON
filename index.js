@@ -37,8 +37,9 @@ const csvToJson = (csvPath, destJson) => {
         for (let j = 0; j < arrayOfValues.length; j++) {
             const key = keys[j];
             object[key] = arrayOfValues[j] || null;
-            data.push(object);
         }
+
+        data.push(object);
     }
 
     fs.writeFileSync(destJson, JSON.stringify(data));
@@ -60,17 +61,19 @@ const jsonToCsv = (jsonPath, destCsv) => {
     // array
     for (let i = 0; i < json.length; i++) {
 
+        const object = json[i];
+
         // object
         let keys = '';
         let value = ''
-        for (let key in json[i]) {
-            let val = json[i][key];
+        for (let key in object) {
+            let val = object[key];
             const regex = new RegExp(separator, 'g');
             if (regex.test(val)) {
                 val = '"' + val + '"';
             }
-            keys += key + separator
-            value += val + separator
+            keys += key + separator;
+            value += val + separator;
         }
 
         keys = keys.slice(0, keys.length - 1)

@@ -3,11 +3,10 @@
 const fs = require('fs');
 const path = require('path');
 
-
 const command = process.argv[2] || 'documentation';
 const argumends = process.argv.slice(3);
 
-const options = {};
+const option = {};
 const commands = [];
 for (let i = 0; i < argumends.length; i++) {
     if (argumends[i].indexOf('--') === 0) {
@@ -15,13 +14,13 @@ for (let i = 0; i < argumends.length; i++) {
         const flagArray = flag.split('=');
         const key = flagArray[0];
         const value = flagArray[1];
-        options[key] = value;
+        option[key] = value;
     } else {
         commands.push(argumends[i])
     }
 }
 
-const csvToJson = (csvPath, destJson) => {
+const csvToJson = (csvPath, destJson, options) => {
     const separator = options.separator || ',';
 
     const csv = fs.readFileSync(csvPath, { encoding: 'utf8' });
@@ -45,14 +44,14 @@ const csvToJson = (csvPath, destJson) => {
     fs.writeFileSync(destJson, JSON.stringify(data));
 };
 
-const cleanMongoDbDataset = (jsonPath, cleanPath) => {
+const cleanMongoDbDataset = (jsonPath, cleanPath, options) => {
     const jsonFile = fs.readFileSync(jsonPath, { encoding: 'utf8' });
     const jsonLines = jsonFile.split('\n');
     const innerData = jsonLines.join(',');
     fs.writeFileSync(cleanPath, `[${innerData.slice(0, innerData.length - 1)}]`);
 }
 
-const jsonToCsv = (jsonPath, destCsv) => {
+const jsonToCsv = (jsonPath, destCsv, options) => {
     const json = require(jsonPath);
 
     if (!Array.isArray(json)) {
@@ -103,7 +102,14 @@ const jsonToCsv = (jsonPath, destCsv) => {
 };
 
 const documentaiton = () => {
-    console.log(``);
+    console.log(`
+    CSV to JSON
+
+    csvToJson documentation
+    csvToJson csv-to-json <existing-csv-file-path> <destintion-json-file-path>
+    csvToJson json-to-csv <existing-csv-file-path> <destintion-json-file-path>
+    csvToJson clean-mongodb-dataset <existing-json-file-path> <destintion-json-file-path>
+    `);
 };
 
 
@@ -115,5 +121,6 @@ const handler = {
 };
 
 const handlerFunction = handler[command];
-handlerFunction(...commands);
+const all = commands.concat(option);
+handlerFunction(...all);
 

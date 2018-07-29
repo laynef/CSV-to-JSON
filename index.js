@@ -25,6 +25,18 @@ const csvToJson = (csvPath, destJson, options) => {
     const keyLine = Number(options.key_line) || 0;
     const valueStartLine = Number(options.value_start_line) || 1;
 
+    if (options.help) {
+        console.log(`
+csvToJson csv-to-json <existing-csv-file-path> <destintion-json-file-path> [options]
+
+Options
+--separator='<The character separating the data>'
+--key_line='<The line number the keys are stored on (default is 0)>'
+--value_start_line='<The line number the values start on (default is 1)>'
+        `);
+        return;
+    }
+
     const csv = fs.readFileSync(csvPath, { encoding: 'utf8' });
     const fileLines = csv.split('\n');
     const keys = fileLines[keyLine].split(separator);
@@ -47,6 +59,14 @@ const csvToJson = (csvPath, destJson, options) => {
 };
 
 const cleanMongoDbDataset = (jsonPath, cleanPath, options) => {
+
+    if (options.help) {
+        console.log(`
+csvToJson clean-mongodb-dataset <existing-json-file-path> <destintion-json-file-path>
+        `);
+        return;
+    }
+
     const jsonFile = fs.readFileSync(jsonPath, { encoding: 'utf8' });
     const jsonLines = jsonFile.split('\n');
     const innerData = jsonLines.join(',');
@@ -55,6 +75,16 @@ const cleanMongoDbDataset = (jsonPath, cleanPath, options) => {
 
 const jsonToCsv = (jsonPath, destCsv, options) => {
     const json = require(jsonPath);
+
+    if (options.help) {
+        console.log(`
+If the json has different schema it will return multiple files. Keeping the data for that schema
+in each separate file. This is separated by a 'dash' and a number.
+
+csvToJson json-to-csv <existing-json-file-path> <destintion-csv-file-path>
+        `);
+        return;
+    }
 
     if (!Array.isArray(json)) {
         console.log('JSON must be an array of objects');
@@ -107,10 +137,20 @@ const documentation = () => {
     console.log(`
 CSV to JSON
 
+Type in the command and '--help' for any documentation on the options given
+JSON-to-CSV will give you multiple files if the schema is different. All data with 
+the same schema will be in the same file.
+
 csvToJson documentation
-csvToJson csv-to-json <existing-csv-file-path> <destintion-json-file-path>
-csvToJson json-to-csv <existing-csv-file-path> <destintion-json-file-path>
+csvToJson csv-to-json <existing-csv-file-path> <destintion-json-file-path> [options]
+csvToJson json-to-csv <existing-json-file-path> <destintion-csv-file-path>
 csvToJson clean-mongodb-dataset <existing-json-file-path> <destintion-json-file-path>
+
+Short hand Alias
+csvToJson docs
+csvToJson c2j <existing-csv-file-path> <destintion-json-file-path> [options]
+csvToJson j2c <existing-json-file-path> <destintion-csv-file-path>
+csvToJson mongo <existing-json-file-path> <destintion-json-file-path>
     `);
 };
 
@@ -120,6 +160,10 @@ const handler = {
     'json-to-csv': jsonToCsv,
     'clean-mongodb-dataset': cleanMongoDbDataset,
     'documentation': documentation,
+    'c2j': csvToJson,
+    'j2c': jsonToCsv,
+    'mongo': cleanMongoDbDataset,
+    'docs': documentation,
 };
 
 const handlerFunction = handler[command];

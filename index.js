@@ -7,7 +7,21 @@ const path = require('path');
 const command = process.argv[2] || 'documentation';
 const argumends = process.argv.slice(3);
 
-const csvToJson = (csvPath, destJson, options) => {
+const options = {};
+const commands = [];
+for (let i = 0; i < argumends.length; i++) {
+    if (argumends[i].indexOf('--') === 0) {
+        const flag = argumends[i].slice(2);
+        const flagArray = flag.split('=');
+        const key = flagArray[0];
+        const value = flagArray[1];
+        options[key] = value;
+    } else {
+        commands.push(argumends[i])
+    }
+}
+
+const csvToJson = (csvPath, destJson) => {
     const separator = options.separator || ',';
 
     const csv = fs.readFileSync(csvPath, { encoding: 'utf8' });
@@ -19,14 +33,18 @@ const csvToJson = (csvPath, destJson, options) => {
     for (let i = 0; i < values.length; i++) {
         const object = {};
         const arrayOfValues = values[i].split(separator);
-        object[keys[i]] = arrayOfValues[i] || null;
-        data.push(object);
+
+        for (let j = 0; j < arrayOfValues.length; j++) {
+            const key = keys[j];
+            object[key] = arrayOfValues[j] || null;
+            data.push(object);
+        }
     }
 
     fs.writeFileSync(destJson, JSON.stringify(data));
 };
 
-const jsonToCsv = (jsonPath, destCsv, options) => {
+const jsonToCsv = (jsonPath, destCsv) => {
     const json = require(jsonPath);
     if (!Array.isArray(json)) {
         console.log('JSON must be an array of objects');
@@ -46,8 +64,13 @@ const jsonToCsv = (jsonPath, destCsv, options) => {
         let keys = '';
         let value = ''
         for (let key in json[i]) {
+            let val = json[i][key];
+            const regex = new RegExp(separator, 'g');
+            if (regex.test(val)) {
+                val = '"' + val + '"';
+            }
             keys += key + separator
-            value += json[i][key] + separator
+            value += val + separator
         }
 
         keys = keys.slice(0, keys.length - 1)
@@ -63,7 +86,7 @@ const jsonToCsv = (jsonPath, destCsv, options) => {
     for (let file in keyCache) {
         const newFilePartial = fileName.split('.');
         const newFilename = count > 0 ? newFilePartial[0] + '-' + count + newFilePartial.slice(1) : fileName;
-        fs.writeFileSync(destintationPath + '/' + newFilename, JSON.stringify(file + '\n' + keyCache[file]));
+        fs.writeFileSync(destintationPath + '/' + newFilename, file + '\n' + keyCache[file]);
     }
 
 };
@@ -80,5 +103,5 @@ const handler = {
 };
 
 const handlerFunction = handler[command];
-handlerFunction(...argumends);
+handlerFunction(...commands);
 

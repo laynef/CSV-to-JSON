@@ -103,12 +103,12 @@ const jsonToCsv = (jsonPath, destCsv, options) => {
 
 const documentation = () => {
     console.log(`
-    CSV to JSON
+CSV to JSON
 
-    csvToJson documentation
-    csvToJson csv-to-json <existing-csv-file-path> <destintion-json-file-path>
-    csvToJson json-to-csv <existing-csv-file-path> <destintion-json-file-path>
-    csvToJson clean-mongodb-dataset <existing-json-file-path> <destintion-json-file-path>
+csvToJson documentation
+csvToJson csv-to-json <existing-csv-file-path> <destintion-json-file-path>
+csvToJson json-to-csv <existing-csv-file-path> <destintion-json-file-path>
+csvToJson clean-mongodb-dataset <existing-json-file-path> <destintion-json-file-path>
     `);
 };
 

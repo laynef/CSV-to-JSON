@@ -1,12 +1,14 @@
 {
   "name": "@lfaler/csv-to-json",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "bin": {"csvToJson": "./index.js"},
+  "bin": {
+    "csvToJson": "./index.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"

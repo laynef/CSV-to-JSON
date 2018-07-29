@@ -20,7 +20,7 @@ for (let i = 0; i < argumends.length; i++) {
     }
 }
 
-if (commands.length != 2) {
+if (commands.length !== 2) {
     if (commands.length < 2) {
         for (let i = commands.length; i < 2; i++) {
             commands.push(null);
@@ -91,7 +91,6 @@ csvToJson clean-mongodb-dataset <existing-json-file-path> <destintion-json-file-
 }
 
 const jsonToCsv = (jsonPath, destCsv, options) => {
-    const json = require(jsonPath);
 
     if (options && options.help) {
         console.log(`
@@ -111,6 +110,8 @@ OR
         `);
         return;
     }
+
+    const json = require(jsonPath);
 
     if (!Array.isArray(json)) {
         console.log('JSON must be an array of objects');

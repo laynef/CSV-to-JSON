@@ -46,7 +46,24 @@ const csvToJson = (csvPath, destJson) => {
 };
 
 const jsonToCsv = (jsonPath, destCsv) => {
-    const json = require(jsonPath);
+    const jsonFile = fs.readFileSync(jsonPath, { encoding: 'utf8' });
+    const jsonLines = jsonFile.split('\n');
+    let json = null;
+    
+    let eachLineIsAnObject = true;
+    for (let i = 0; i < jsonLines.length; i++) {
+        if (jsonLines[i][0] !== '{' && jsonLines[i][jsonLines[i].length - 1] !== '}') {
+            eachLineIsAnObject = false;
+            break;
+        }
+    }
+
+   if (eachLineIsAnObject) {
+        json = JSON.parse('[' + jsonLines.join(',') + ']');
+   } else {
+       json = require(jsonPath);
+   }
+
     if (!Array.isArray(json)) {
         console.log('JSON must be an array of objects');
     }

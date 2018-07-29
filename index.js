@@ -77,8 +77,8 @@ const jsonToCsv = (jsonPath, destCsv) => {
         for (let key in object) {
             let val = object[key];
             const regex = new RegExp(separator, 'g');
-            if (regex.test(val)) {
-                val = '"' + val + '"';
+            if (regex.test(val) || typeof val === 'object') {
+                val = '"' + JSON.stringify(val).replace(/\"/g, '\\"') + '"';
             }
             keys += key + separator;
             value += val + separator;

@@ -101,7 +101,7 @@ const jsonToCsv = (jsonPath, destCsv, options) => {
 
 };
 
-const documentaiton = () => {
+const documentation = () => {
     console.log(`
     CSV to JSON
 
@@ -117,7 +117,7 @@ const handler = {
     'csv-to-json': csvToJson,
     'json-to-csv': jsonToCsv,
     'clean-mongodb-dataset': cleanMongoDbDataset,
-    'documentaiton': documentaiton,
+    'documentation': documentation,
 };
 
 const handlerFunction = handler[command];

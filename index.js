@@ -3,6 +3,7 @@ const path = require('path');
 
 
 const command = process.argv[2] || 'documentation';
+const argumends = process.argv.slice(3);
 
 const csvToJson = (csvPath, destJson) => {
     const csv = fs.readFileSync(csvPath, { encoding: 'utf8' });
@@ -60,4 +61,18 @@ const jsonToCsv = (jsonPath, destCsv) => {
     }
 
 };
+
+const documentaiton = () => {
+    console.log(``);
+};
+
+
+const handler = {
+    'csv-to-json': csvToJson,
+    'json-to-csv': jsonToCsv,
+    'documentaiton': documentaiton,
+};
+
+const handlerFunction = handler[command];
+handlerFunction(...argumends);
 

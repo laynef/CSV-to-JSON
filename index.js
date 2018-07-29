@@ -7,16 +7,18 @@ const path = require('path');
 const command = process.argv[2] || 'documentation';
 const argumends = process.argv.slice(3);
 
-const csvToJson = (csvPath, destJson) => {
+const csvToJson = (csvPath, destJson, options) => {
+    const separator = options.separator || ',';
+
     const csv = fs.readFileSync(csvPath, { encoding: 'utf8' });
     const fileLines = csv.split('\n');
-    const keys = fileLines[0].split(',');
+    const keys = fileLines[0].split(separator);
     const values = fileLines.slice(1);
 
     const data = [];
     for (let i = 0; i < values.length; i++) {
         const object = {};
-        const arrayOfValues = values[i].split(',');
+        const arrayOfValues = values[i].split(separator);
         object[keys[i]] = arrayOfValues[i] || null;
         data.push(object);
     }
@@ -24,11 +26,13 @@ const csvToJson = (csvPath, destJson) => {
     fs.writeFileSync(destJson, JSON.stringify(data));
 };
 
-const jsonToCsv = (jsonPath, destCsv) => {
+const jsonToCsv = (jsonPath, destCsv, options) => {
     const json = require(jsonPath);
     if (!Array.isArray(json)) {
         console.log('JSON must be an array of objects');
     }
+
+    const separator = options.separator || ',';
 
     const destintationArray = destCsv.split('/');
     const destintationPath = destintationArray.slice(0, destintationArray.length - 1).join('/');
@@ -42,8 +46,8 @@ const jsonToCsv = (jsonPath, destCsv) => {
         let keys = '';
         let value = ''
         for (let key in json[i]) {
-            keys += key + ','
-            value += json[i][key] + ','
+            keys += key + separator
+            value += json[i][key] + separator
         }
 
         keys = keys.slice(0, keys.length - 1)

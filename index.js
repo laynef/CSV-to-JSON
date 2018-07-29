@@ -7,22 +7,26 @@ const command = process.argv[2] || 'documentation';
 const argumends = process.argv.slice(3);
 
 const option = {};
-const commands = [];
+let commands = [];
 for (let i = 0; i < argumends.length; i++) {
     if (argumends[i].indexOf('--') === 0) {
         const flag = argumends[i].slice(2);
         const flagArray = flag.split('=');
         const key = flagArray[0];
-        const value = flagArray[1];
+        const value = flagArray.length > 1 ? flagArray[1] : true;
         option[key] = value;
     } else {
         commands.push(argumends[i])
     }
 }
 
+if (commands.length !== 2) {
+    commands = [null, null];
+}
+
 const csvToJson = (csvPath, destJson, options) => {
-    
-    if (options.help) {
+
+    if (options && options.help) {
         console.log(`
 csvToJson csv-to-json <existing-csv-file-path> <destintion-json-file-path> [options]
 
@@ -63,7 +67,7 @@ Options
 
 const cleanMongoDbDataset = (jsonPath, cleanPath, options) => {
 
-    if (options.help) {
+    if (options && options.help) {
         console.log(`
 csvToJson clean-mongodb-dataset <existing-json-file-path> <destintion-json-file-path>
         `);
@@ -79,7 +83,7 @@ csvToJson clean-mongodb-dataset <existing-json-file-path> <destintion-json-file-
 const jsonToCsv = (jsonPath, destCsv, options) => {
     const json = require(jsonPath);
 
-    if (options.help) {
+    if (options && options.help) {
         console.log(`
 If the json has different schema it will return multiple files. Keeping the data for that schema
 in each separate file. This is separated by a 'dash' and a number.

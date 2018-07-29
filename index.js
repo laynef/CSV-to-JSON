@@ -45,24 +45,15 @@ const csvToJson = (csvPath, destJson) => {
     fs.writeFileSync(destJson, JSON.stringify(data));
 };
 
-const jsonToCsv = (jsonPath, destCsv) => {
+const cleanMongoDbDataset = (jsonPath, cleanPath) => {
     const jsonFile = fs.readFileSync(jsonPath, { encoding: 'utf8' });
     const jsonLines = jsonFile.split('\n');
-    let json = null;
-    
-    let eachLineIsAnObject = true;
-    for (let i = 0; i < jsonLines.length; i++) {
-        if (jsonLines[i][0] !== '{' && jsonLines[i][jsonLines[i].length - 1] !== '}') {
-            eachLineIsAnObject = false;
-            break;
-        }
-    }
+    const innerData = jsonLines.join(',');
+    fs.writeFileSync(cleanPath, `[${innerData.slice(0, innerData.length - 1)}]`);
+}
 
-   if (eachLineIsAnObject) {
-        json = JSON.parse('[' + jsonLines.join(',') + ']');
-   } else {
-       json = require(jsonPath);
-   }
+const jsonToCsv = (jsonPath, destCsv) => {
+    const json = require(jsonPath);
 
     if (!Array.isArray(json)) {
         console.log('JSON must be an array of objects');
@@ -119,6 +110,7 @@ const documentaiton = () => {
 const handler = {
     'csv-to-json': csvToJson,
     'json-to-csv': jsonToCsv,
+    'clean-mongodb-dataset': cleanMongoDbDataset,
     'documentaiton': documentaiton,
 };
 

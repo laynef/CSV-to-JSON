@@ -20,8 +20,14 @@ for (let i = 0; i < argumends.length; i++) {
     }
 }
 
-if (commands.length !== 2) {
-    commands = [null, null];
+if (commands.length != 2) {
+    if (commands.length < 2) {
+        for (let i = commands.length; i < 2; i++) {
+            commands.push(null);
+        }
+    } else {
+        commands = commands.slice(0, 2);
+    }
 }
 
 const csvToJson = (csvPath, destJson, options) => {
@@ -33,6 +39,10 @@ csvToJson csv-to-json <existing-csv-file-path> <destintion-json-file-path> [opti
 Options
 --key_line='<The line number the keys are stored on (default is 0)>'
 --value_start_line='<The line number the values start on (default is 1)>'
+
+Separators
+--all_separators='<The character the values get separated be (default is ,)>'
+OR
 --key_separator='<The character the values get separated be (default is ,)>'
 --value_separator='<The character the values get separated be (default is ,)>'
         `);
@@ -41,8 +51,8 @@ Options
 
     const keyLine = Number(options.key_line) || 0;
     const valueStartLine = Number(options.value_start_line) || 1;
-    const keySeparator = options.key_separator || ',';
-    const valueSeparator = options.value_separator || ',';
+    const keySeparator = options.all_separators || options.key_separator || ',';
+    const valueSeparator = options.all_separators || options.value_separator || ',';
 
     const csv = fs.readFileSync(csvPath, { encoding: 'utf8' });
     const fileLines = csv.split('\n');
@@ -91,9 +101,13 @@ in each separate file. This is separated by a 'dash' and a number.
 csvToJson json-to-csv <existing-json-file-path> <destintion-csv-file-path> [options]
 
 Options
+--amount_of_separated_lines='<The amount the separated between keys and values (default is 1)>'
+
+Separators
+--all_separators='<The character the values get separated be (default is ,)>'
+OR
 --key_separator='<The character the values get separated be (default is ,)>'
 --value_separator='<The character the values get separated be (default is ,)>'
---amount_of_separated_lines='<The amount the separated between keys and values (default is 1)>'
         `);
         return;
     }
@@ -102,8 +116,8 @@ Options
         console.log('JSON must be an array of objects');
     }
 
-    const keySeparator = options.key_separator || ',';
-    const valueSeparator = options.value_separator || ',';
+    const keySeparator = options.all_separators || options.key_separator || ',';
+    const valueSeparator = options.all_separators || options.value_separator || ',';
     const amountOfSeparatedLines = Number(options.amount_of_separated_lines) || 1;
 
     const destintationArray = destCsv.split('/');

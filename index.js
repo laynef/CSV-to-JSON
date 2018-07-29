@@ -22,11 +22,13 @@ for (let i = 0; i < argumends.length; i++) {
 
 const csvToJson = (csvPath, destJson, options) => {
     const separator = options.separator || ',';
+    const keyLine = Number(options.key_line) || 0;
+    const valueStartLine = Number(options.value_start_line) || 1;
 
     const csv = fs.readFileSync(csvPath, { encoding: 'utf8' });
     const fileLines = csv.split('\n');
-    const keys = fileLines[0].split(separator);
-    const values = fileLines.slice(1);
+    const keys = fileLines[keyLine].split(separator);
+    const values = fileLines.slice(valueStartLine);
 
     const data = [];
     for (let i = 0; i < values.length; i++) {

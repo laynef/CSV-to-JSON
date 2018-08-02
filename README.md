@@ -2,8 +2,7 @@
 
 ## Installation
 ```
-git clone https://github.com/laynef/CSV-to-JSON.git
-npm i -g
+npm i -g @lfaler/csv-to-json
 csvToJson
 ```
 
@@ -21,7 +20,7 @@ csvToJson json-to-csv <existing-csv-file-path> <destintion-json-file-path>
 
 ### Clean MongoDB DataSet
 
-If your dataset is a file with a object in each line however is not an array. 
+If your dataset is a file with a object in each line however is not an array.
 This command will convert that file into an array of objects.
 
 ```

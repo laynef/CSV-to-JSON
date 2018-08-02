@@ -1,4 +1,4 @@
-const description = '<ENTER YOUR DESCRIPTION>';
+const description = 'Convert your json file to csv format';
 
 const command = (jsonPath, destCsv, options) => {
 

@@ -1,4 +1,4 @@
-const description = '<ENTER YOUR DESCRIPTION>';
+const description = 'Converts mongodb datasets where each line is an object and the file is not an array';
 
 const command = (argument1, argumentN, options) => {
     const jsonFile = fs.readFileSync(jsonPath, { encoding: 'utf8' });

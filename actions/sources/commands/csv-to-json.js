@@ -3,12 +3,11 @@ const path = require('path');
 const description = 'Convert your csv file to json format';
 
 const command = (csvp, djson, options) => {
-
     const csvPath = path.resolve(csvp);
     const destJson = path.resolve(djson);
 
-    const keyLine = Number(options.key_line) || 0;
-    const valueStartLine = Number(options.value_start_line) || 1;
+    const keyLine = options.key_line ? Number(options.key_line) : 0;
+    const valueStartLine = options.value_start_line ? Number(options.value_start_line) : 1;
     const keySeparator = options.all_separators || options.key_separator || ',';
     const valueSeparator = options.all_separators || options.value_separator || ',';
 

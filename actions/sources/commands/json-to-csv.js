@@ -4,8 +4,14 @@ const description = 'Convert your json file to csv format';
 
 const command = (jsn, dcsv, options) => {
 
-    const jsonPath = path.resolve(jsn);
-    const destCsv = path.resolve(dcsv);
+    if (!jsn) {
+        console.log('No JSON file path');
+    } else if (!dcsv) {
+        console.log('No CSV file path');
+    }
+
+    const jsonPath = path.resolve(`${jsn}`);
+    const destCsv = path.resolve(`${dcsv}`);
     const tempJsn = fs.readFileSync(jsonPath, { encoding: 'utf' });
     const json = JSON.parse(tempJsn);
 

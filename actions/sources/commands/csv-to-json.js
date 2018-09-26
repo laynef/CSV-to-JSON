@@ -1,6 +1,12 @@
+const fs = require('fs');
+const path = require('path');
 const description = 'Convert your csv file to json format';
 
-const command = (csvPath, destJson, options) => {
+const command = (csvp, djson, options) => {
+
+    const csvPath = path.resolve(csvp);
+    const destJson = path.resolve(djson);
+
     const keyLine = Number(options.key_line) || 0;
     const valueStartLine = Number(options.value_start_line) || 1;
     const keySeparator = options.all_separators || options.key_separator || ',';

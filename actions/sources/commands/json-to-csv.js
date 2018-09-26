@@ -1,7 +1,11 @@
+const fs = require('fs');
+const path = require('path');
 const description = 'Convert your json file to csv format';
 
-const command = (jsonPath, destCsv, options) => {
+const command = (jsn, dcsv, options) => {
 
+    const jsonPath = path.resolve(jsn);
+    const destCsv = path.resolve(dcsv);
     const json = require(jsonPath);
 
     if (!Array.isArray(json)) {

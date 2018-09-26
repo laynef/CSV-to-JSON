@@ -3,6 +3,13 @@ const path = require('path');
 const description = 'Convert your csv file to json format';
 
 const command = (csvp, djson, options) => {
+
+    if (!djson) {
+        console.log('No JSON file path');
+    } else if (!csvp) {
+        console.log('No CSV file path');
+    }
+    
     const csvPath = path.resolve(csvp);
     const destJson = path.resolve(djson);
 

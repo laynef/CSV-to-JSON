@@ -6,7 +6,8 @@ const command = (jsn, dcsv, options) => {
 
     const jsonPath = path.resolve(jsn);
     const destCsv = path.resolve(dcsv);
-    const json = require(jsonPath);
+    const tempJsn = fs.readFileSync(jsonPath, { encoding: 'utf' });
+    const json = JSON.parse(tempJsn);
 
     if (!Array.isArray(json)) {
         console.log('JSON must be an array of objects');
